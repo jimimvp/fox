@@ -1,11 +1,12 @@
 import jax.numpy as jnp
 from jax import random
-from jax.experimental import stax  # neural network library
-from jax.experimental.stax import Dense, Relu, normal  # neural network layers
 import flax
-from typing import List, Sequence
+from typing import  Sequence
+from numpyro.distributions import Normal, Distribution
+from flax.linen import Dense, relu
+from jax import numpy as jnp
+from jax.random import PRNGKey
 
-from models.normalizing_flow.distributions import Distribution
 
 class Transform(flax.linen.Module):
     
@@ -69,21 +70,6 @@ class RealNVP(Transform):
     flip: bool
         
     def shift_and_log_scale_fn(self, u1: jnp.array) -> list:
-        """
-        A neural network returning in output shift and log-scale of the affine coupling block.
-
-        Parameters
-        ----------
-        u1: jnp.array
-            Input of the neural network. It corresponds to half of the total input.
-        layer_params: jnp.array
-            Parameters of the neural network.
-
-        Returns
-        -------
-        shift, log_scale: tuple
-            Shift and log-scale of the affine couple block.
-        """
         s = self.net(u1)
         return jnp.split(s, 2, axis=-1)
     
@@ -122,13 +108,6 @@ class Sequential(flax.linen.Module):
     return x
 
 
-from flax.linen import Dense, relu
-from jax import numpy as jnp
-from jax.random import PRNGKey
-
-from models.normalizing_flow.distributions import StandardGaussian
-
-
 if __name__ == '__main__':
     
     mlp = lambda: Sequential([
@@ -143,7 +122,8 @@ if __name__ == '__main__':
     
     
     flow = NormalizingFlow((RealNVP(mlp(), False), RealNVP(mlp(), False), RealNVP(mlp(), False)))
-    flow_dist = NormalizingFlowDist(StandardGaussian(2), flow)
+    prior = Normal(jnp.zeros(2), jnp.ones(2))
+    flow_dist = NormalizingFlowDist(prior, flow)
     
     
     params = flow_dist.init(prng_key, x, method=flow_dist.log_prob)
