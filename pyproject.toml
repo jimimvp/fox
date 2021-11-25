@@ -12,6 +12,7 @@ tqdm = "^4.62.3"
 flax = "^0.3.6"
 sklearn = "^0.0"
 numpyro = "*"
+dm-haiku = "^0.0.5"
 
 
 [tool.poetry.dev-dependencies]

@@ -42,6 +42,24 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "dm-haiku"
+version = "0.0.5"
+description = "Haiku is a library for building neural networks in JAX."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+absl-py = ">=0.7.1"
+jmp = ">=0.0.2"
+numpy = ">=1.18.0"
+tabulate = ">=0.8.9"
+typing-extensions = {version = "*", markers = "python_version < \"3.8\""}
+
+[package.extras]
+jax = ["jax (==0.2.22)", "jaxlib (==0.1.73)"]
+
+[[package]]
 name = "dm-tree"
 version = "0.1.6"
 description = "Tree is a library for working with nested data structures."
@@ -135,6 +153,21 @@ absl-py = "*"
 flatbuffers = ">=1.12,<3.0"
 numpy = ">=1.18"
 scipy = "*"
+
+[[package]]
+name = "jmp"
+version = "0.0.2"
+description = "JMP is a Mixed Precision library for JAX."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = ">=1.19.5"
+
+[package.extras]
+jax = ["jax (>=0.1.71)"]
+jaxlib = ["jaxlib (>=0.1.49)"]
 
 [[package]]
 name = "joblib"
@@ -349,6 +382,17 @@ python-versions = "*"
 scikit-learn = "*"
 
 [[package]]
+name = "tabulate"
+version = "0.8.9"
+description = "Pretty-print tabular data"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[[package]]
 name = "threadpoolctl"
 version = "3.0.0"
 description = "threadpoolctl"
@@ -399,7 +443,7 @@ python-versions = ">=3.6"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7"
-content-hash = "98b39470799469dd38102108716e25a45eadbbc801cb2a0430b31dee21dc45d1"
+content-hash = "baea4e42bb7b0e3989441fff2de9c2a5dd99f2311adf8fc6357c9088f89af2f9"
 
 [metadata.files]
 absl-py = [
@@ -417,6 +461,10 @@ colorama = [
 cycler = [
     {file = "cycler-0.11.0-py3-none-any.whl", hash = "sha256:3a27e95f763a428a739d2add979fa7494c912a32c17c4c38c4d5f082cad165a3"},
     {file = "cycler-0.11.0.tar.gz", hash = "sha256:9c87405839a19696e837b3b818fed3f5f69f16f1eec1a1ad77e043dcea9c772f"},
+]
+dm-haiku = [
+    {file = "dm-haiku-0.0.5.tar.gz", hash = "sha256:e986237e1f840aa3bd26217ecad84b611bf1456e2139f0f79ea71f9c6222d231"},
+    {file = "dm_haiku-0.0.5-py3-none-any.whl", hash = "sha256:e2cb422f476eb686dfba670a1d2257d8c20d2f87006665a79b97e5de50fa8379"},
 ]
 dm-tree = [
     {file = "dm-tree-0.1.6.tar.gz", hash = "sha256:6776404b23b4522c01012ffb314632aba092c9541577004ab153321e87da439a"},
@@ -460,6 +508,10 @@ jaxlib = [
     {file = "jaxlib-0.1.74-cp39-none-macosx_10_9_x86_64.whl", hash = "sha256:d0b949c9d95bf040eae9ccfc71ad006c32d15c621266d5ef6f640bb7a2787b87"},
     {file = "jaxlib-0.1.74-cp39-none-macosx_11_0_arm64.whl", hash = "sha256:f1545a16c39df63a37c0c58edb16f4f5feb75a5cff353e372b9ad25ab61ba048"},
     {file = "jaxlib-0.1.74-cp39-none-manylinux2010_x86_64.whl", hash = "sha256:1a8d9232ed24c3bae7c0c53e57b7183da98d83eeff86ac4fd2d182328337d71b"},
+]
+jmp = [
+    {file = "jmp-0.0.2-py3-none-any.whl", hash = "sha256:48f94b2ba0c9db759851a23cce2fbfa622e954c3c811651bc11b196246f02527"},
+    {file = "jmp-0.0.2.tar.gz", hash = "sha256:fdb5cec0d10aab4116c2770f24b2adf4f503fcfbb96ce8ef583e1879bdbf1b9b"},
 ]
 joblib = [
     {file = "joblib-1.1.0-py2.py3-none-any.whl", hash = "sha256:f21f109b3c7ff9d95f8387f752d0d9c34a02aa2f7060c2135f465da0e5160ff6"},
@@ -733,6 +785,10 @@ six = [
 ]
 sklearn = [
     {file = "sklearn-0.0.tar.gz", hash = "sha256:e23001573aa194b834122d2b9562459bf5ae494a2d59ca6b8aa22c85a44c0e31"},
+]
+tabulate = [
+    {file = "tabulate-0.8.9-py3-none-any.whl", hash = "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4"},
+    {file = "tabulate-0.8.9.tar.gz", hash = "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"},
 ]
 threadpoolctl = [
     {file = "threadpoolctl-3.0.0-py3-none-any.whl", hash = "sha256:4fade5b3b48ae4b1c30f200b28f39180371104fccc642e039e0f2435ec8cc211"},
