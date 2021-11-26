@@ -50,9 +50,9 @@ class InvertibleMM(Transform):
     def forward(self, z):
         d = z.shape[-1]
         W = self.param('W', orthogonal(), (d,d))
-        return z@W, jnp.linalg.slogdet(W)[1]
+        return z@W, 0, #jnp.linalg.slogdet(W)[1]
     
     def backward(self, x):
         W = self.get_variable("params", "W")
         inv_W = jnp.linalg.inv(W)
-        return x @ inv_W, jnp.linalg.slogdet(inv_W)
+        return x @ inv_W, jnp.linalg.slogdet(inv_W)[1]
