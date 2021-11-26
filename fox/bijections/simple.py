@@ -1,8 +1,9 @@
 from ..core import Transform
 import flax
+from flax.linen import compact
 from typing import Sequence
 from jax import numpy as jnp
-
+from jax.nn.initializers import orthogonal
 class RealNVP(Transform):
     net: flax.linen.Module
     flip: bool
@@ -21,7 +22,7 @@ class RealNVP(Transform):
         if self.flip:
             u1, v2 = v2, u1
         v = jnp.concatenate([u1, v2], axis=-1)
-        return v, 0 # 0 is incorrect, but it is not used for log-density estimation anyway
+        return v, log_scale.sum(-1) # 0 is incorrect, but it is not used for log-density estimation anyway
     
     def backward(self, v) -> tuple:
         mid = v.shape[-1] // 2
@@ -36,3 +37,22 @@ class RealNVP(Transform):
         u = jnp.concatenate([v1, u2], axis=-1)
         return u, -log_scale.sum(-1)
 
+
+
+
+class InvertibleMM(Transform):
+    """ An implementation of a invertible matrix multiplication
+    layer from Glow: Generative Flow with Invertible 1x1 Convolutions
+    (https://arxiv.org/abs/1807.03039).
+    """
+
+    @compact
+    def forward(self, z):
+        d = z.shape[-1]
+        W = self.param('W', orthogonal(), (d,d))
+        return z@W, jnp.linalg.slogdet(W)[1]
+    
+    def backward(self, x):
+        W = self.get_variable("params", "W")
+        inv_W = jnp.linalg.inv(W)
+        return x @ inv_W, jnp.linalg.slogdet(inv_W)
