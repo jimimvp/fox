@@ -13,6 +13,7 @@ flax = "^0.3.6"
 sklearn = "^0.0"
 numpyro = "*"
 dm-haiku = "^0.0.5"
+pytest = "*"
 
 
 [tool.poetry.dev-dependencies]
