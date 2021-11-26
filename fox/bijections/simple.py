@@ -4,6 +4,7 @@ from flax.linen import compact
 from typing import Sequence
 from jax import numpy as jnp
 from jax.nn.initializers import orthogonal
+from jax.nn import sigmoid
 class RealNVP(Transform):
     net: flax.linen.Module
     flip: bool
@@ -56,3 +57,18 @@ class InvertibleMM(Transform):
         W = self.get_variable("params", "W")
         inv_W = jnp.linalg.inv(W)
         return x @ inv_W, jnp.linalg.slogdet(inv_W)[1]
+
+
+
+
+class Sigmoid(Transform):
+
+    def forward(self, x):
+        return sigmoid(x), jnp.log(sigmoid(x) * (1 - sigmoid(x))).sum(-1)
+           
+    def backward(self, x):
+        return jnp.log(x /(1 - x)), -jnp.log(x - x**2).sum(-1)
+
+class Logit(Transform):
+    pass #TODO
+

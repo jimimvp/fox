@@ -60,3 +60,23 @@ def test_imm_bijection(x, imm: InvertibleMM):
     z, ldj = imm.apply(params, x,  method=imm.forward)
     x_, _ = imm.apply(params, z, method=imm.backward)
     assert jnp.isclose(x_-x, 0, atol=1e-5).all()
+
+
+
+##### sigmoid layer test
+
+from fox.bijections.simple import Sigmoid
+
+@fixture
+def sigmoid():
+    return Sigmoid()
+
+
+def test_sigmoid_bijection(x, sigmoid):
+    rng = jax.random.PRNGKey(0)
+    layer = sigmoid
+    params = layer.init(rng, x, method=layer.forward)
+    z, ldj = layer.apply({}, x,  method=layer.forward)
+    x_, _ = layer.apply({}, z, method=layer.backward)
+    assert jnp.isclose(x_-x, 0, atol=1e-5).all()
+
