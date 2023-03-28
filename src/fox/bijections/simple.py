@@ -3,7 +3,7 @@ import flax
 from flax.linen import compact
 from typing import Sequence
 from jax import numpy as jnp
-from jax.nn.initializers import orthogonal
+from jax.nn.initializers import orthogonal, zeros
 from jax.nn import sigmoid
 
 class RealNVP(Transform):

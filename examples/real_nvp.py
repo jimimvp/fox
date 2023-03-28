@@ -28,7 +28,7 @@ X = load_moons(4000)
 
 # create train loop
 loss = functools.partial(nll_loss, flow_dist=flow_dist)
-opt_params = train(rng, params, loss, X, lr=5e-4, steps=10000, batch_size=256)
+opt_params = train(rng, params, loss, X, lr=1e-3, steps=10000, batch_size=256)
 
 # sample from learned flow
 from  fox.utils import plot_samples_2d
@@ -39,3 +39,4 @@ fig, ax = plot_samples_2d(samples, X, samples_initial)
 
 print("Showing figure...")
 plt.show()
+plt.savefig("real_nvp.png", dpi=300, bbox_inches='tight')

@@ -5,16 +5,16 @@ description = "Normalizing Flows in JAX"
 authors = ["Marin Vlastelica <marin.vlastelicap@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = ">=3.8"
 jax = "*"
 optax = "*"
 tqdm = "*"
 flax = "*"
-sklearn = "*"
 numpyro = "*"
 dm-haiku = "^0.0.5"
 setuptools = "*"
 pytest = "*"
+scikit-learn = "^1.2.2"
 
 [tool.poetry.dev-dependencies]
 

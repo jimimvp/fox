@@ -5,9 +5,7 @@ import jax
 from jax import numpy as jnp
 from flax.linen import Dense, Module
 from typing import Any, Callable, Sequence
-from jax._src.lax.lax import DType
 from jax.random import PRNGKey
-from flax.linen.linear import default_kernel_init, zeros
 from flax.linen.initializers import lecun_normal, zeros
 from flax.linen import compact
 from  jax import lax
@@ -41,7 +39,7 @@ class MaskedDense(Module):
   features: int
   mask: jnp.array = 1.0
   use_bias: bool = True
-  dtype: DType = jnp.float32
+  dtype = jnp.float32
   precision: Any = None
   kernel_init: Callable = default_kernel_init
   bias_init: Callable = zeros
