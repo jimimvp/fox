@@ -1,20 +1,21 @@
 [tool.poetry]
-name = "jax-flows"
+name = "fox"
 version = "0.1.0"
-description = ""
-authors = ["Marin Vlastelica <marin.vlastelicap@gmail.com"]
+description = "Normalizing Flows in JAX"
+authors = ["Marin Vlastelica <marin.vlastelicap@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.7"
-jax = "^0.2.25"
-optax = "^0.0.9"
-tqdm = "^4.62.3"
-flax = "^0.3.6"
-sklearn = "^0.0"
+jax = "*"
+optax = "*"
+tqdm = "*"
+flax = "*"
+sklearn = "*"
 numpyro = "*"
 dm-haiku = "^0.0.5"
+setuptools = "*"
 pytest = "*"
-
+fox = {path = ".", develop = true}
 
 [tool.poetry.dev-dependencies]
 

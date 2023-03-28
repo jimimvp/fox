@@ -9,13 +9,16 @@ import jax
 
 rng = jax.random.PRNGKey(0)
 
+def get_mlp():
+    f = False
+    while True:
+        yield RealNVP(MLP([256,256, 64], 2, activation=jax.nn.tanh), f)
+        f = not f
+
+mlp_gen = get_mlp()
+print(next(mlp_gen))
 # create model
-flow = NormalizingFlow([
-    RealNVP(MLP([64,64, 64], 2), False),
-    RealNVP(MLP([64,64, 64], 2), True),
-    RealNVP(MLP([64,64, 64], 2), False),
-    RealNVP(MLP([64,64, 64], 2), True)
-    ])
+flow = NormalizingFlow([ next(mlp_gen) for _ in range(5)])
 prior = StandardGaussian(2) 
 flow_dist = NormalizingFlowDist(prior, flow)
 params = flow_dist.init(rng, rng, 2, method=flow_dist.sample)
@@ -30,8 +33,9 @@ opt_params = train(rng, params, loss, X, lr=5e-4, steps=10000, batch_size=256)
 # sample from learned flow
 from  fox.utils import plot_samples_2d
 samples = flow_dist.apply(opt_params, rng, 1000, method=flow_dist.sample)
+samples_initial = flow_dist.apply(params, rng, 1000, method=flow_dist.sample)
 
-fig, ax = plot_samples_2d(samples, X)
+fig, ax = plot_samples_2d(samples, X, samples_initial)
 
 print("Showing figure...")
 plt.show()

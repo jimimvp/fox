@@ -1,6 +1,7 @@
 """
     Just standard training loop for simple testing
 """
+from dataclasses import dataclass
 from types import MethodType
 from jax.interpreters.batching import batch
 from matplotlib.pyplot import plot
@@ -28,6 +29,11 @@ def load_moons(N):
     X = StandardScaler().fit_transform(X)
     return X
 
+def load_swiss_roll(N):
+    X = datasets.make_swiss_roll(N)[0][:,:2]
+    X = StandardScaler().fit_transform(X)
+    return X
+
 def nll_loss(params, X_batch, flow_dist):
     return - (flow_dist.apply(params,X_batch,  method=flow_dist.log_prob)).mean()
 
@@ -35,7 +41,7 @@ def batch_iter(rng, X, batch_size, steps):
     s = 0
     while True:
         rng, rng1 = jax.random.split(rng)
-        X_shuff = jax.random.shuffle(rng1, X)
+        X_shuff = jax.random.permutation(rng1, X)
         for i in range(0 ,len(X_shuff)-batch_size, batch_size):
             yield X_shuff[i:i+batch_size]
             s+=1
@@ -73,7 +79,7 @@ def train(rng,  params: jnp.array, loss, X: np.array, lr: float = 3e-4, steps: i
 if __name__ == '__main__':
     from fox.nn import MLP
     from fox.core import NormalizingFlowDist, NormalizingFlow
-    from fox.bijections.simple import RealNVP
+    from fox.bijections.simple import RealNVP, InvertibleMM, Sigmoid
     from fox.distributions import StandardGaussian
     from matplotlib import pyplot as plt
 
@@ -81,27 +87,29 @@ if __name__ == '__main__':
 
     # create model
     flow = NormalizingFlow([
-        RealNVP(MLP([64,64, 64], 2), False),
-        RealNVP(MLP([64,64, 64], 2), True),
-        RealNVP(MLP([64,64, 64], 2), False),
-        RealNVP(MLP([64,64, 64], 2), True)
+        RealNVP(MLP([512,512], 2), False),
+        InvertibleMM(),
+        RealNVP(MLP([512,512], 2), True),
+        InvertibleMM(),
+        RealNVP(MLP([512,512], 2), False),
         ])
     prior = StandardGaussian(2) 
     flow_dist = NormalizingFlowDist(prior, flow)
     params = flow_dist.init(rng, rng, 2, method=flow_dist.sample)
 
     # create dataset 
-    X = load_moons(4000)
+    X = load_moons(1000)
 
     # create train loop
     loss = functools.partial(nll_loss, flow_dist=flow_dist)
-    opt_params = train(rng, params, loss, X, lr=5e-4, steps=10000, batch_size=256)
+    opt_params = train(rng, params, loss, X, lr=1e-4, steps=10000, batch_size=512)
     
     # sample from learned flow
     from  fox.utils import plot_samples_2d
     samples = flow_dist.apply(opt_params, rng, 1000, method=flow_dist.sample)
+    samples_initial = flow_dist.apply(params, rng, 1000, method=flow_dist.sample)
 
-    fig, ax = plot_samples_2d(samples, X)
+    fig, ax = plot_samples_2d(samples, X, samples_initial)
 
     print("Showing figure...")
     plt.show()

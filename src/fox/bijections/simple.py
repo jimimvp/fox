@@ -5,6 +5,7 @@ from typing import Sequence
 from jax import numpy as jnp
 from jax.nn.initializers import orthogonal
 from jax.nn import sigmoid
+
 class RealNVP(Transform):
     net: flax.linen.Module
     flip: bool
