@@ -15,7 +15,6 @@ numpyro = "*"
 dm-haiku = "^0.0.5"
 setuptools = "*"
 pytest = "*"
-fox = {path = ".", develop = true}
 
 [tool.poetry.dev-dependencies]
 
