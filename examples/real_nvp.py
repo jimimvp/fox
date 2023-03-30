@@ -18,7 +18,7 @@ def get_mlp():
 mlp_gen = get_mlp()
 print(next(mlp_gen))
 # create model
-flow = NormalizingFlow([ next(mlp_gen) for _ in range(5)])
+flow = NormalizingFlow([ next(mlp_gen) for _ in range(3)])
 prior = StandardGaussian(2) 
 flow_dist = NormalizingFlowDist(prior, flow)
 params = flow_dist.init(rng, rng, 2, method=flow_dist.sample)
@@ -28,7 +28,7 @@ X = load_moons(4000)
 
 # create train loop
 loss = functools.partial(nll_loss, flow_dist=flow_dist)
-opt_params = train(rng, params, loss, X, lr=1e-3, steps=10000, batch_size=256)
+opt_params = train(rng, params, loss, X, lr=1e-3, steps=40000, batch_size=256)
 
 # sample from learned flow
 from  fox.utils import plot_samples_2d
